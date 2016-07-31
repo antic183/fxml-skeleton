@@ -126,6 +126,7 @@ public class MySqlPersonDao implements InterPersonDao
   public void cleanAndClose() {
     try {
       conn.close();
+      System.out.println("sql connection was closed!");
     } catch (SQLException e) {
       e.printStackTrace();
     }

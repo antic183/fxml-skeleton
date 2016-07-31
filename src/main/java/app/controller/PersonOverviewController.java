@@ -10,6 +10,7 @@ import app.model.Person;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -19,6 +20,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.IOException;
 
@@ -116,6 +118,15 @@ public class PersonOverviewController
   @Subscribe
   private void addStage(SetPrimaryStageEvent eventObject) throws IOException {
     rootStage = eventObject.getStage();
+
+    rootStage.setOnCloseRequest(new EventHandler<WindowEvent>()
+    {
+      public void handle(WindowEvent we) {
+        System.out.println("Stage is closing");
+        db.cleanAndClose();
+      }
+    });
+
     showPersonDetails();
     addCellSelectionListener();
     initDialog();
