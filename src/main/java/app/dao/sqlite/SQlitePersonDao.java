@@ -15,6 +15,11 @@ import java.sql.*;
 @Singleton
 public class SQlitePersonDao implements InterPersonDao
 {
+
+  /*
+  * TODO: create abstract SQLPersonDao -> extends SQlitePersonDao, MySqlPersonDao
+  */
+
   private final String URL;
   private final String TABLE_NAME = "persons";
   Connection conn = null;
