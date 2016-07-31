@@ -77,6 +77,11 @@ public class JsonPersonDao implements InterPersonDao
     }
   }
 
+  @Override
+  public void cleanAndClose() {
+
+  }
+
   private void readPersonsFromFile() {
     File dataFile = new File(DATA_FILE);
     if (dataFile.exists()) {

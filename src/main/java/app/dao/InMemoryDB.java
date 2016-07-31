@@ -45,4 +45,9 @@ public class InMemoryDB implements InterPersonDao
   public void deleteAllPersons() {
     persons.clear();
   }
+
+  @Override
+  public void cleanAndClose() {
+    // todo
+  }
 }

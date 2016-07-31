@@ -17,9 +17,7 @@ public class MySqlPersonDao implements InterPersonDao
   private final String URL;
   private final String USER_NAME;
   private final String PASSWORD;
-
   private final String TABLE_NAME = "persons";
-
   private Connection conn;
 
   private ObservableList<Person> persons = FXCollections.observableArrayList();
@@ -35,6 +33,11 @@ public class MySqlPersonDao implements InterPersonDao
     try {
       conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
     } catch (SQLException e) {
+      try {
+        conn.close();
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+      }
       System.out.println(e.getMessage());
     }
   }
@@ -88,6 +91,7 @@ public class MySqlPersonDao implements InterPersonDao
         preparedStatement.setString(2, person.getLastName());
         preparedStatement.setLong(3, person.getId());
         preparedStatement.execute();
+        preparedStatement.close();
       } catch (SQLException e) {
         throw new Exception("SQL Update Exception!");
       }
@@ -99,11 +103,12 @@ public class MySqlPersonDao implements InterPersonDao
   public void deletePerson(Person person) throws Exception {
     if (person.getId() != 0) {
       try {
-        String query = "DELETE FROM " + TABLE_NAME + " where id=(?) LIMIT 1 ---";
+        String query = "DELETE FROM " + TABLE_NAME + " where id=(?) LIMIT 1";
         PreparedStatement preparedStatement = conn.prepareStatement(query);
         preparedStatement.setLong(1, person.getId());
         preparedStatement.execute();
-        getAllPersons();
+        preparedStatement.close();
+        persons.remove(person);
       } catch (SQLException e) {
         throw new Exception("SQL Delete Exception!");
       }
@@ -113,8 +118,17 @@ public class MySqlPersonDao implements InterPersonDao
   }
 
   public void deleteAllPersons() {
-    //String sql = "delete from persons";
+    // todo
     System.out.println("delete all!");
+  }
+
+  @Override
+  public void cleanAndClose() {
+    try {
+      conn.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 
 }

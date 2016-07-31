@@ -20,4 +20,6 @@ public interface InterPersonDao
   public void deletePerson(Person person) throws Exception;
 
   public void deleteAllPersons();
+
+  public void cleanAndClose();
 }
